@@ -94,5 +94,51 @@ namespace CoffeeShopTests
             Assert.DoesNotContain(item1.Name, html);
             Assert.Contains(item2.Name, html);
         }
+
+        [Fact]
+        public async Task New_DisplaysFormWithNameAndPrice()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            Item item1 = new Item { Name = "Frape", PriceInCents = 299 };
+            Item item2 = new Item { Name = "Donut", PriceInCents = 199 };
+            context.Items.Add(item1);
+            context.Items.Add(item2);
+            context.SaveChanges();
+
+            var response = await client.GetAsync($"/items/new");
+            response.EnsureSuccessStatusCode();
+
+            var html = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains("form method=\"post\" action=\"/items/new\"", html);
+            Assert.Contains("<input type=\"text\" id=\"Name\" name=\"Name\" required />", html);
+            Assert.Contains("<input type=\"Number\" id=\"Price\" name=\"PriceInCents\" min=\"0\" required />", html);
+
+        }
+
+        [Fact]
+        public async Task Create_AddsItemToDataBase()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            //Item item1 = new Item { Name = "Frape", PriceInCents = 299 };
+            //context.Items.Add(item1);
+            //context.SaveChanges();
+
+            var formData = new Dictionary<string, string>
+            {
+                {"Name", "frape" },
+                {"PriceInCents", "299" }
+            };
+
+            var response = await client.PostAsync($"/items/new", new FormUrlEncodedContent(formData));
+            var html = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains("frape", html);
+
+        }
     }
 }

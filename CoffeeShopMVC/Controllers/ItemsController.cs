@@ -1,4 +1,5 @@
 ﻿using CoffeeShopMVC.DataAccess;
+using CoffeeShopMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoffeeShopMVC.Controllers
@@ -33,6 +34,23 @@ namespace CoffeeShopMVC.Controllers
             var item = _context.Items.Find(id);
             _context.Items.Remove(item);
             _context.SaveChanges();
+            return RedirectToAction("index");
+        }
+
+
+        public IActionResult New()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        [Route("/items/new")]
+        public IActionResult Create(Item item)
+        {
+            _context.Items.Add(item);
+            _context.SaveChanges();
+
             return RedirectToAction("index");
         }
     }

@@ -63,5 +63,23 @@ namespace CoffeeShopTests.FeatureTests
             Assert.Contains("$10.00", html);
             Assert.DoesNotContain("$2.50", html);
         }
+
+        [Fact]
+        public async Task Test_Delete_OnlyDeletesOneItem()
+        {
+            var context = GetDbContext();
+            Item CM = new Item { Name = "Coffee Machine", PriceInCents = 1000 };
+            context.Items.Add(CM);
+            context.Items.Add(new Item { Name = "Coffee Grinder", PriceInCents = 250 });
+            context.SaveChanges();
+
+            var client = _factory.CreateClient();
+            var response = await client.PostAsync($"/Items/Details/Delete/{CM.Id}", null);
+            var html = await response.Content.ReadAsStringAsync();
+
+            response.EnsureSuccessStatusCode();
+            Assert.DoesNotContain("Coffee Machine", html);
+            Assert.Contains("Coffee Grinder", html);
+        }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CoffeeShopTests
 {
-    public class ItemsControllerTests
+    public class ItemsControllerTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly WebApplicationFactory<Program> _factory;
         
@@ -49,5 +49,30 @@ namespace CoffeeShopTests
             Assert.DoesNotContain(item2.PriceInCents.ToString(), html);
 
         }
+
+        [Fact]
+        public async Task Show_ReturnsOneItemDetails()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            Item item1 = new Item { Name = "Coffee", PriceInCents = 299 };
+            Item item2 = new Item { Name = "Donut", PriceInCents = 199 };
+            context.Items.Add(item1);
+            context.Items.Add(item2);
+            context.SaveChanges();
+
+            var response = await client.GetAsync($"/items/details/{item1.Id}");
+            response.EnsureSuccessStatusCode();
+
+            var html = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains(item1.Name, html);
+            Assert.DoesNotContain(item2.Name, html);
+            Assert.Contains("$2.99", html);
+
+        }
+
+
     }
 }

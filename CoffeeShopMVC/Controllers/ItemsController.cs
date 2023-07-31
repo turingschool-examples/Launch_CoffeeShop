@@ -42,5 +42,14 @@ namespace CoffeeShopMVC.Controllers
             return Redirect($"/items/details/{item.Id}");
             //return RedirectToAction("show", new {id = newItemId});
         }
+        [HttpPost]
+        public IActionResult Delete(int Id)
+        {
+            var item = _context.Items.Find(Id);
+            _context.Items.Remove(item);
+            _context.SaveChanges();
+
+            return Redirect("/items");
+        }
     }
 }

@@ -17,5 +17,11 @@ namespace CoffeeShopMVC.Controllers
             var items = _context.Items.ToList();
             return View(items);
         }
+        [Route("/Items/details/{itemId:int}")]
+        public IActionResult Show(int itemId)
+        {
+            var item = _context.Items.Find(itemId);
+            return View(item);
+        }
     }
 }

@@ -30,6 +30,24 @@ namespace CoffeeShopTests
             Assert.Contains("Latte", html);
         }
 
+        [Fact]
+        public async Task Show_ReturnsView_WithNameAndPrice()
+        {
+            var context = GetDbContext();
+            context.Items.Add(new Item { Name = "Latte", PriceInCents = 600 });
+            var coffee = new Item { Name = "Iced Coffee", PriceInCents = 825 };
+            context.Items.Add(coffee);
+            context.SaveChanges();
+
+            var client = _factory.CreateClient();
+            var response = await client.GetAsync($"/items/details/{coffee.Id}");
+            var html = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains("Iced Coffee", html);
+            Assert.Contains("$8.25", html);
+            Assert.DoesNotContain("Latte", html);
+        }
+
         private CoffeeShopMVCContext GetDbContext()
         {
             var optionsBuilder = new DbContextOptionsBuilder<CoffeeShopMVCContext>();

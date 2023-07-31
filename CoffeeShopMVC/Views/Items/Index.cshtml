@@ -1,0 +1,17 @@
+﻿@model IEnumerable<CoffeeShopMVC.Model.Item>
+<h1>Items</h1>
+
+@if (Model.Any() != false)
+{
+    @foreach (var item in Model)
+    {
+        <div>
+            <p>Name: @item.Name, Price in Cents: @item.PriceInCents</p>
+        </div>
+    }
+}
+else
+{
+    <p>No data available.</p>
+}
+

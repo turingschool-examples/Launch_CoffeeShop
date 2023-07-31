@@ -1,0 +1,7 @@
+﻿@model IEnumerable<Item>
+
+<h1>Items</h1>
+@foreach(var item in Model)
+{
+	<p>Name: @item.Name, Price: @item.PriceInCents</p>
+}

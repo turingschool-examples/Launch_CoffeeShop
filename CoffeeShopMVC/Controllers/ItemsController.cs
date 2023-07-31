@@ -34,13 +34,13 @@ namespace CoffeeShopMVC.Controllers
         [HttpPost]
         public IActionResult Index(Item item)
         {
-           // var newItemId = item.Id;
+          
             _context.Items.Add(item);
             _context.SaveChanges();
-            
+              var newItemId = item.Id;
 
-            return Redirect($"/items/details/{item.Id}");
-            //return RedirectToAction("show", new {id = newItemId});
+           // return Redirect($"/items/details/{item.Id}");
+            return RedirectToAction("details", new {id = newItemId});
         }
         [HttpPost]
         public IActionResult Delete(int Id)

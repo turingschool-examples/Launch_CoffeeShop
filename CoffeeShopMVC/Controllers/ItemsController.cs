@@ -17,5 +17,20 @@ namespace CoffeeShopMVC.Controllers
             var items = _context.Items; 
             return View(items);
         }
+
+        public IActionResult New()
+        {
+            return View();
+        }
+
+        public IActionResult Create(Item item)
+        {
+            _context.Items.Add(item);
+            _context.SaveChanges();
+            var newItemId = item.Id;
+
+            return Redirect($"/items/{newItemId}");
+            //return RedirectToAction("show", new {id = newItemId});
+        }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace CoffeeShopTests
 {
+    [Collection("Item Controller Tests")]
     public class ItemsControllerTests : IClassFixture<WebApplicationFactory<Program>>
     {
 
@@ -27,6 +28,7 @@ namespace CoffeeShopTests
             var response = await client.GetAsync("/items");
             var html = await response.Content.ReadAsStringAsync();
 
+            response.EnsureSuccessStatusCode();
             Assert.Contains("Latte", html);
         }
 
@@ -43,9 +45,27 @@ namespace CoffeeShopTests
             var response = await client.GetAsync($"/items/details/{coffee.Id}");
             var html = await response.Content.ReadAsStringAsync();
 
+            response.EnsureSuccessStatusCode();
             Assert.Contains("Iced Coffee", html);
             Assert.Contains("$8.25", html);
             Assert.DoesNotContain("Latte", html);
+        }
+
+        [Fact]
+        public async Task DeleteAction_DeletesFromDatabase()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            var item = new Item { Name = "Espresso", PriceInCents = 225 };
+            context.Items.Add(item);
+            context.SaveChanges();
+
+            var response = await client.PostAsync($"/items/delete/{item.Id}", null);
+            var html = await response.Content.ReadAsStringAsync();
+
+            response.EnsureSuccessStatusCode();
+            Assert.DoesNotContain("Espresso", html);
         }
 
         private CoffeeShopMVCContext GetDbContext()

@@ -25,5 +25,18 @@ namespace CoffeeShopMVC.Controllers
             var item = _context.Items.Find(id);
             return View(item);
         }
+
+        [HttpPost]
+        [Route("/Items/Details/Delete/{id:int}")]
+        public IActionResult Delete(int id)
+        {
+            var item = _context.Items.Find(id);
+
+            _context.Items.Remove(item);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
     }
 }

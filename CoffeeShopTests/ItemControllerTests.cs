@@ -44,5 +44,24 @@ namespace CoffeeShopTests.FeatureTests
             Assert.Contains("Coffee Machine", html);
             Assert.Contains("Coffee Grinder", html);
         }
+
+        [Fact]
+        public async Task Test_Show_ReturnsItemDetails()
+        {
+            var context = GetDbContext();
+            context.Items.Add(new Item { Name = "Coffee Machine", PriceInCents = 1000 });
+            context.Items.Add(new Item { Name = "Coffee Grinder", PriceInCents = 250 });
+            context.SaveChanges();
+
+            var client = _factory.CreateClient();
+            var response = await client.GetAsync("/Items/Details/1");
+            var html = await response.Content.ReadAsStringAsync();
+
+            response.EnsureSuccessStatusCode();
+            Assert.Contains("Coffee Machine", html);
+            Assert.DoesNotContain("Coffee Grinder", html);
+            Assert.Contains("$10.00", html);
+            Assert.DoesNotContain("$2.50", html);
+        }
     }
 }

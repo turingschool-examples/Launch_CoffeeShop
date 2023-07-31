@@ -118,7 +118,7 @@ namespace CoffeeShopTests
             Assert.Contains("<input type=\"Number\" id=\"Price\" name=\"PriceInCents\" min=\"0\" required />", html);
         }
 
-
+        [Fact]
         public async Task Edit_ReturnsViewWithPrePopulatedForm()
         {
             var context = GetDbContext();

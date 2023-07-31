@@ -2,3 +2,6 @@
 
 <h1>@Model.Name</h1>
 <h3>@Model.PriceInDollars()</h3>
+<form method="post" action="/items/details/@Model.Id/delete">
+    <button type="submit">Delete @Model.Name</button>
+</form>

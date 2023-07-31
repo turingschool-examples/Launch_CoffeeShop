@@ -73,6 +73,26 @@ namespace CoffeeShopTests
 
         }
 
+        [Fact]
+        public async Task Delete_DeletesOneItem()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
 
+            Item item1 = new Item { Name = "Frape", PriceInCents = 299 };
+            Item item2 = new Item { Name = "Donut", PriceInCents = 199 };
+            context.Items.Add(item1);
+            context.Items.Add(item2);
+            context.SaveChanges();
+
+            var formdata = new Dictionary<string, string>();
+
+            var response = await client.PostAsync($"/items/details/{item1.Id}/delete", new FormUrlEncodedContent(formdata));
+            response.EnsureSuccessStatusCode();
+
+            var html = await response.Content.ReadAsStringAsync();
+            Assert.DoesNotContain(item1.Name, html);
+            Assert.Contains(item2.Name, html);
+        }
     }
 }

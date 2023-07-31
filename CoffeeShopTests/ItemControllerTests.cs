@@ -94,5 +94,57 @@ namespace CoffeeShopTests
             Assert.DoesNotContain(item1.Name, html);
             Assert.Contains(item2.Name, html);
         }
+
+        [Fact]
+        public async Task Edit_ReturnsViewWithPrePopulatedForm()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            Item item1 = new Item { Name = "Frape", PriceInCents = 299 };
+            Item item2 = new Item { Name = "Donut", PriceInCents = 199 };
+            context.Items.Add(item1);
+            context.Items.Add(item2);
+            context.SaveChanges();
+
+            var response = await client.GetAsync($"/items/edit/{item1.Id}");
+            response.EnsureSuccessStatusCode();
+
+            var html = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains(item1.Name, html);
+            Assert.Contains(item1.PriceInCents.ToString(), html);
+            Assert.Contains($"<form method=\"post\" action=\"/items/details/{item1.Id}\">", html);
+        }
+
+        [Fact]
+        public async Task Update_RedirectsToShowPageWithUpdatedInfo()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            Item item1 = new Item { Name = "Frape", PriceInCents = 299 };
+            Item item2 = new Item { Name = "Donut", PriceInCents = 199 };
+            context.Items.Add(item1);
+            context.Items.Add(item2);
+            context.SaveChanges();
+
+            var formdata = new Dictionary<string, string>
+            {
+                {"Name",  "Frappacino"},
+                {"PriceInCents", "298" }
+            };
+
+            var response = await client.PostAsync($"/items/details/{item1.Id}", new FormUrlEncodedContent(formdata));
+            response.EnsureSuccessStatusCode();
+
+            var html = await response.Content.ReadAsStringAsync();
+            Assert.DoesNotContain(item1.Name, html);
+            Assert.Contains("Frappacino", html);
+            Assert.DoesNotContain("$2.99", html);
+            Assert.Contains("$2.98", html);
+
+        }
+
     }
 }

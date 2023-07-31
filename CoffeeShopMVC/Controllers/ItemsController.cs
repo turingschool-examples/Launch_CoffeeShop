@@ -14,8 +14,16 @@ namespace CoffeeShopMVC.Controllers
         }
         public IActionResult Index()
         {
-            var items = _context.Items; 
+            var items = _context.Items;
             return View(items);
+        }
+
+        [Route("/items/details/{Id:int}")]
+        public IActionResult Details(int Id)
+        {
+            var item = _context.Items.Find(Id);
+            return View(item);
+
         }
 
         public IActionResult New()
@@ -23,13 +31,15 @@ namespace CoffeeShopMVC.Controllers
             return View();
         }
 
-        public IActionResult Create(Item item)
+        [HttpPost]
+        public IActionResult Index(Item item)
         {
+           // var newItemId = item.Id;
             _context.Items.Add(item);
             _context.SaveChanges();
-            var newItemId = item.Id;
+            
 
-            return Redirect($"/items/{newItemId}");
+            return Redirect($"/items/details/{item.Id}");
             //return RedirectToAction("show", new {id = newItemId});
         }
     }

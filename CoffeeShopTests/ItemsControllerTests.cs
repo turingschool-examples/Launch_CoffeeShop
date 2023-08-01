@@ -3,6 +3,7 @@ using CoffeeShopMVC.DataAccess;
 using CoffeeShopMVC.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Testing;
+using System.Net;
 
 namespace CoffeeShopTests
 {
@@ -66,6 +67,21 @@ namespace CoffeeShopTests
 
             response.EnsureSuccessStatusCode();
             Assert.DoesNotContain("Espresso", html);
+
+        }
+        [Fact]
+        public async Task New_ReturnsViewWithForm()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            var response = await client.GetAsync("/items/new");
+            var html = await response.Content.ReadAsStringAsync();
+
+            response.EnsureSuccessStatusCode();
+            Assert.Contains("Name:", html);
+            Assert.Contains("Price:", html);
+            Assert.Contains($"<form method=\"post\" action=\"/items/create\">", html);
         }
 
         private CoffeeShopMVCContext GetDbContext()

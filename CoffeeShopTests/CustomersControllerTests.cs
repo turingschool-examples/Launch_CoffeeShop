@@ -65,5 +65,44 @@ namespace CoffeeShopTests
             Assert.Contains("Email", html);
 
         }
+
+        [Fact]
+        public async Task Create_AddsCustomerToDB()
+        {
+            var client = _factory.CreateClient();
+
+            var addCustomerFormData = new Dictionary<string, string>
+            {
+                {"Name", "DirtDrinker" },
+                {"Email", "DirtDrinker@gmail.com" }
+            };
+
+            var response = await client.PostAsync("/customers", new FormUrlEncodedContent(addCustomerFormData));
+            var html = await response.Content.ReadAsStringAsync();
+
+            response.EnsureSuccessStatusCode();
+
+            Assert.Contains("DirtDrinker", html);
+            Assert.Contains("DirtDrinker@gmail.com", html);
+        }
+
+        [Fact]
+        public async Task Details_ShowsCustomerDetails()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            Customer dirtdrinker = new Customer { Name = "DirtDrinker", Email = "DirtDrinker@gmail.com" };
+            context.Add(dirtdrinker);
+            context.SaveChanges();
+
+            var response = await client.GetAsync($"/customers/details/{dirtdrinker.Id}");
+            var html = await response.Content.ReadAsStringAsync();
+
+            response.EnsureSuccessStatusCode();
+
+            Assert.Contains("DirtDrinker", html);
+            Assert.Contains("DirtDrinker@gmail.com", html);
+        }
     }
 }

@@ -140,7 +140,7 @@ namespace CoffeeShopTests
             response.EnsureSuccessStatusCode();
 
             Assert.Contains("Dirt", html);
-            Assert.Contains("<form method=\"post\" action=\"/items/details/1\">", html);
+            Assert.Contains("<form method=\"post\" action=\"/items/1\">", html);
             Assert.Contains("<button type=\"submit\">Save Changes</button>", html);
             Assert.Contains("<button type=\"submit\">Go Back to Items List</button>", html);
 

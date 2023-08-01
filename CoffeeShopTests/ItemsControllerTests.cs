@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CoffeeShopTests
 {
+    [Collection("Controller Tests")]
     public class ItemsControllerTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly WebApplicationFactory<Program> _factory;

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CoffeeShopTests
 {
+    [Collection("Controller Tests")]
     public class CustomersControllerTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly WebApplicationFactory<Program> _factory;
@@ -79,6 +80,28 @@ namespace CoffeeShopTests
             var html = await response.Content.ReadAsStringAsync();
 
             Assert.Contains("Eli", html);
+        }
+
+        [Fact]
+        public async Task Show_ShowsViewWithOnlyOneCustomer()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            var customer1 = new Customer { Name = "John", Email = "john@john.john" };
+            var customer2 = new Customer { Name = "James", Email = "james@james.james" };
+            context.Customers.Add(customer1);
+            context.Customers.Add(customer2);
+            context.SaveChanges();
+
+            var response = await client.GetAsync($"/customers/details/{customer1.Id}");
+            response.EnsureSuccessStatusCode();
+
+            var html = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains("John", html);
+            Assert.DoesNotContain("James", html);
+            Assert.Contains("$1.99", html);
         }
     }
 }

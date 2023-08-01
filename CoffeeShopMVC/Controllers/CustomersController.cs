@@ -1,6 +1,7 @@
 ﻿using CoffeeShopMVC.DataAccess;
 using CoffeeShopMVC.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CoffeeShopMVC.Controllers
 {
@@ -36,6 +37,13 @@ namespace CoffeeShopMVC.Controllers
             return RedirectToAction("index");
         }
 
+        [Route("/customers/details/{id:int}")]
+        public IActionResult Show(int id)
+        {
+            var customer = _context.Customers.Include(c => c.Orders).Where(c => c.Id == id).Single();
+
+            return View(customer);
+        }
 
     }
 }

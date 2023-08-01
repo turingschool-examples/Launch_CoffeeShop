@@ -82,6 +82,23 @@ namespace CoffeeShopTests
             Assert.Contains("Dirt", html);
             Assert.Contains("1", html);
         }
+
+        [Fact]
+        public async Task Details_ShowsItemDetails()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            Item dirt = new Item { Name = "Dirt", PriceInCents = 100 };
+            context.Add(dirt);
+            context.SaveChanges();
+
+            var response = await client.GetAsync($"/items/details/{dirt.Id}");
+            var html = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains("Dirt", html);
+            Assert.Contains("1", html);
+        }
     }
 }
 

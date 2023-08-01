@@ -18,6 +18,11 @@ namespace CoffeeShopMVC.Controllers
             return View();
         }
 
+        public IActionResult New()
+        {
+            return View();
+        }
+
         public IActionResult Delete(int id)
         {
             var c = _context.Customers.Find(id);

@@ -1,0 +1,10 @@
+﻿@model Customer
+<h1>@Model.Name</h1>
+<h3>@Model.Email</h3>
+<h4>@Model.TotalSpent()</h4>
+<h2>All Items</h2>
+
+@foreach(string item in Model.AllItems())
+{
+    <p>@item</p>
+}

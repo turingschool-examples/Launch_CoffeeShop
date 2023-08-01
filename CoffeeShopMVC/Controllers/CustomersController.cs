@@ -18,15 +18,6 @@ namespace CoffeeShopMVC.Controllers
             return View();
         }
 
-        public IActionResult Delete(int id)
-        {
-            var c = _context.Customers.Find(id);
-            _context.Customers.Remove(c);
-            _context.SaveChanges();
-
-            return Redirect("/customers");
-        }
-
         [Route("/customers/{id:int}/edit")]
         public IActionResult Edit(int id)
         {
@@ -44,6 +35,15 @@ namespace CoffeeShopMVC.Controllers
             _context.SaveChanges();
 
             return Redirect($"/customers/{customer.Id}");
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var c = _context.Customers.Find(id);
+            _context.Customers.Remove(c);
+            _context.SaveChanges();
+
+            return Redirect("/customers");
         }
     }
 }

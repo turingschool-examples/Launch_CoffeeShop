@@ -1,5 +1,21 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model Customer
+
+<h1>Edit Customer Information</h1>
+
+<form method="post" action="/customers">
+
+    <div class="form-group">
+        <label for="Name">Name: </label>
+        <input type="text" id="Name" name="Name" value="@Model.Name"/>
+    </div>
+
+    <div class="form-group">
+        <label for="Email">Price: </label>
+        <input type="text" id="Email" name="Email" value="@Model.Email"/>
+    </div>
+
+    <div class="submitbutton">
+        <button type="submit">Save Changes</button>
+    </div>
+
+</form>

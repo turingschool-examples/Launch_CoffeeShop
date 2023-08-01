@@ -81,63 +81,64 @@ namespace CoffeeShopTests
             };
 
             var response = await client.PostAsync("/customers", new FormUrlEncodedContent(addCustomerFormData));
-            
+            var html = await response.Content.ReadAsStringAsync();
 
 
             Assert.Contains("DirtDrinker", html);
             Assert.Contains("DirtDrinker@gmail.com", html);
-
-
-        [Fact]
-        public async Task Edit_ReturnsFormToEdit()
-        {
-            var context = GetDbContext();
-            var client = _factory.CreateClient();
-
-            Customer customer = new Customer { Name = "john doe", Email = "johndoe123@gmail.com"};
-            context.Add(customer);
-            context.SaveChanges();
-
-            var response = await client.PostAsync($"/customers/edit/{customer.Id}", null);
-            var html = await response.Content.ReadAsStringAsync();
-
-            response.EnsureSuccessStatusCode();
-
-            Assert.Contains("john doe", html);
-            Assert.Contains("johndoe123@gmail.com", html);
-            Assert.Contains("<form method=\"post\" action=\"/customers/1\">", html);
-            Assert.Contains("<button type=\"submit\">Save Changes</button>", html);
         }
 
-        [Fact]
-        public async Task Update_SavesNewCustomerInformation()
-        {
-            var context = GetDbContext();
-            var client = _factory.CreateClient();
 
-            Customer customer = new Customer { Name = "john", Email = "johndoe123@gmail.com" };
-            context.Add(customer);
-            context.SaveChanges();
+            [Fact]
+            public async Task Edit_ReturnsFormToEdit()
+            {
+                var context = GetDbContext();
+                var client = _factory.CreateClient();
 
-            var addItemFormData = new Dictionary<string, string>
+                Customer customer = new Customer { Name = "john doe", Email = "johndoe123@gmail.com" };
+                context.Add(customer);
+                context.SaveChanges();
+
+                var response = await client.PostAsync($"/customers/edit/{customer.Id}", null);
+                var html = await response.Content.ReadAsStringAsync();
+
+                response.EnsureSuccessStatusCode();
+
+                Assert.Contains("john doe", html);
+                Assert.Contains("johndoe123@gmail.com", html);
+                Assert.Contains("<form method=\"post\" action=\"/customers/1\">", html);
+                Assert.Contains("<button type=\"submit\">Save Changes</button>", html);
+            }
+
+            [Fact]
+            public async Task Update_SavesNewCustomerInformation()
+            {
+                var context = GetDbContext();
+                var client = _factory.CreateClient();
+
+                Customer customer = new Customer { Name = "john", Email = "johndoe123@gmail.com" };
+                context.Add(customer);
+                context.SaveChanges();
+
+                var addItemFormData = new Dictionary<string, string>
             {
                 {"Name", "Mrs. Puff" },
                 {"Email", "teachpuff600@gmail.com" }
             };
 
-            var response = await client.PostAsync($"/customers/{customer.Id}", new FormUrlEncodedContent(addItemFormData));
+                var response = await client.PutAsync($"/customers/{customer.Id}", new FormUrlEncodedContent(addItemFormData));
 
-            var html = await response.Content.ReadAsStringAsync();
+                var html = await response.Content.ReadAsStringAsync();
 
-            response.EnsureSuccessStatusCode();
-            
-            Assert.Contains("Mrs. Puff", html);
-            Assert.Contains("teachpuff600@gmail.com", html);
-            Assert.DoesNotContain("john doe", html);
-            Assert.DoesNotContain("johndoe123@gmail.com", html);
-        }
+                response.EnsureSuccessStatusCode();
 
-        }
+                Assert.Contains("Mrs. Puff", html);
+                Assert.Contains("teachpuff600@gmail.com", html);
+                Assert.DoesNotContain("john doe", html);
+                Assert.DoesNotContain("johndoe123@gmail.com", html);
+            }
+
+        
 
         [Fact]
         public async Task Details_ShowsCustomerDetails()
@@ -158,9 +159,14 @@ namespace CoffeeShopTests
 
             Assert.Contains("DirtDrinker", html);
             Assert.Contains("DirtDrinker@gmail.com", html);
+        }
 
-             [Fact]
-            public async Task Delete_RemovesCustomer()
+            [Fact]
+        public async Task Delete_RemovesCustomer()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
             Customer customer = new Customer { Name = "john doe", Email = "johndoe123@gmail.com" };
             context.Add(customer);
             context.SaveChanges();
@@ -170,7 +176,9 @@ namespace CoffeeShopTests
 
             response.EnsureSuccessStatusCode();
             Assert.DoesNotContain("john doe", html);
+        }
 
         }
     }
-}
+
+

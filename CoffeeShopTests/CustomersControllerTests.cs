@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CoffeeShopTests
 {
-    public class CustomerControllerTests : IClassFixture<WebApplicationFactory<Program>>
+    public class CustomersControllerTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly WebApplicationFactory<Program> _factory;
         
-        public CustomerControllerTests(WebApplicationFactory<Program> factory)
+        public CustomersControllerTests(WebApplicationFactory<Program> factory)
         {
             _factory = factory;
         }

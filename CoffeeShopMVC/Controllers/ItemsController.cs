@@ -33,10 +33,9 @@ namespace CoffeeShopMVC.Controllers
         [HttpPost]
         public IActionResult Index(Item item)
         {
-          
             _context.Items.Add(item);
             _context.SaveChanges();
-              var newItemId = item.Id;
+            var newItemId = item.Id;
 
            // return Redirect($"/items/details/{item.Id}");
             return RedirectToAction("details", new {id = newItemId});
@@ -52,7 +51,7 @@ namespace CoffeeShopMVC.Controllers
             return Redirect("/items");
         }
 
-        [Route("/items/{id:int}/edit")]
+        [Route("/items/edit/{id:int}")]
         public IActionResult Edit(int Id)
         {
             var item = _context.Items.Find(Id);

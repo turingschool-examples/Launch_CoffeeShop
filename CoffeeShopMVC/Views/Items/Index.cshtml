@@ -1,9 +1,11 @@
 ﻿@model IEnumerable<Item>
 
+    <h1>All Items</h1>
+
     <ul>
         @foreach (var item in Model)
     {
-        <li>@item.Name: @item.PriceInDollars()</li>
+        <li><a href="/items/details/@item.Id>">@item.Name</a>: @item.PriceInDollars()</li>
     }
 
     </ul>

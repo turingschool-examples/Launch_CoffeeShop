@@ -142,7 +142,7 @@ namespace CoffeeShopTests
         [Fact]
         public async Task Create_AddsItemToDataBase()
         {
-            var context = GetDbContext();
+
             var client = _factory.CreateClient();
             var formData = new Dictionary<string, string>
             {

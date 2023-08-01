@@ -2,7 +2,7 @@
 
 <h1>Item Details</h1>
 
-<p>Name: @Model.Name, Price In Dollars: @((Model.PriceInCents / 100m).ToString("C2")) </p>
+<p>Name: @Model.Name, Price: @((Model.PriceInCents / 100m).ToString("C2")) </p>
 <div>
 <form action="/Items/Details/Delete/@Model.Id" method="post">
     <button type="submit">Delete</button>

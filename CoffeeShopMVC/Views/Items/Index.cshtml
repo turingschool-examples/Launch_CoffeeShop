@@ -6,7 +6,7 @@
     @foreach (var item in Model)
     {
         <div>
-            <p>Name: @item.Name, Price in Cents: @((@item.PriceInCents / 100m).ToString("C2"))</p>
+            <p>Name: @item.Name, Price: @((@item.PriceInCents / 100m).ToString("C2"))</p>
         </div>
     }
 }

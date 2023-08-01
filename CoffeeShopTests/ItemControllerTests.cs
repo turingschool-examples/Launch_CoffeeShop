@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using CoffeeShopMVC.Models;
 using CoffeeShopMVC.Model;
+using System.Net;
 
 namespace CoffeeShopTests.FeatureTests
 {
@@ -80,6 +81,44 @@ namespace CoffeeShopTests.FeatureTests
             response.EnsureSuccessStatusCode();
             Assert.DoesNotContain("Coffee Machine", html);
             Assert.Contains("Coffee Grinder", html);
+        }
+
+        [Fact]
+        public async Task _Test_New_ReturnsViewWithForm()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            var response = await client.GetAsync($"/Items/New");
+            var html = await response.Content.ReadAsStringAsync();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Contains($"<form method=\"post\" action=\"/items\">", html);
+        }
+
+        [Fact]
+        public async void Test_Create_AddsItemToDatabase()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            context.Items.Add(new Item { Name = "Coffee Grinder", PriceInCents = 250 });
+            context.SaveChanges();
+
+            var formData = new Dictionary<string, string>
+            {
+                { "Name", "Coffee Grinder" }
+            };
+
+            var response = await client.PostAsync("/items/details/1", new FormUrlEncodedContent(formData));
+            var html = await response.Content.ReadAsStringAsync();
+
+            response.EnsureSuccessStatusCode();
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Contains("Coffee Grinder", html);
+
+            Assert.Equal(1, context.Items.Count());
+            Assert.Equal("Coffee Grinder", context.Items.First().Name);
         }
     }
 }

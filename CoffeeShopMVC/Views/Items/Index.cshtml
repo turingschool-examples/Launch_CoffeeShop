@@ -1,0 +1,12 @@
+﻿@model List<Item>
+
+<h1>Items</h1>
+
+@foreach(var item in Model)
+{
+    <p>
+        @item.Name <a href ="/items/details/@item.Id">Details</a>
+    </p>
+}
+
+<a href ="/items/new">New Item</a>

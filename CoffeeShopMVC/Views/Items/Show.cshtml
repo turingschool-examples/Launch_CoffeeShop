@@ -1,0 +1,8 @@
+﻿@model Item
+
+<h1>@Model.Name</h1>
+<h3>@Model.PriceInDollars()</h3>
+<a href="/items/edit/@Model.Id">Edit</a>
+<form method="post" action="/items/details/@Model.Id/delete">
+    <button type="submit">Delete @Model.Name</button>
+</form>

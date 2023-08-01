@@ -44,6 +44,7 @@ namespace CoffeeShopTests
             var response = await client.GetAsync("/Items");
             var html = await response.Content.ReadAsStringAsync();
 
+            response.EnsureSuccessStatusCode();
             Assert.Contains("Dirt", html);
             Assert.Contains("Sand", html);
 
@@ -58,6 +59,7 @@ namespace CoffeeShopTests
             var response = await client.GetAsync("/Items/new");
             var html = await response.Content.ReadAsStringAsync();
 
+            response.EnsureSuccessStatusCode();
             Assert.Contains("<form method=\"post\" action=\"/items\">", html);
             Assert.Contains("<button type=\"submit\" >Add Item</button>", html);
             Assert.Contains("Name", html);
@@ -79,6 +81,8 @@ namespace CoffeeShopTests
             var response = await client.PostAsync("/items", new FormUrlEncodedContent(addItemFormData));
             var html = await response.Content.ReadAsStringAsync();
 
+            response.EnsureSuccessStatusCode();
+
             Assert.Contains("Dirt", html);
             Assert.Contains("1", html);
         }
@@ -96,9 +100,27 @@ namespace CoffeeShopTests
             var response = await client.GetAsync($"/items/details/{dirt.Id}");
             var html = await response.Content.ReadAsStringAsync();
 
+            response.EnsureSuccessStatusCode();
+
             Assert.Contains("Dirt", html);
             Assert.Contains("1", html);
         }
+
+        [Fact]
+        public async Task Delete_DeletesItemFromDB()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            Item dirt = new Item { Name = "Dirt", PriceInCents = 100 };
+            context.Add(dirt);
+            context.SaveChanges();
+
+            var response = await client.PostAsync($"/items/delete/{dirt.Id}", null);
+            var html = await response.Content.ReadAsStringAsync();
+
+            response.EnsureSuccessStatusCode();
+            Assert.DoesNotContain("Dirt", html);
+        }
     }
 }
-

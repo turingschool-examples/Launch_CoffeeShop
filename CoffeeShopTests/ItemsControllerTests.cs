@@ -96,7 +96,6 @@ namespace CoffeeShopTests
         }
 
         [Fact]
-
         public async Task New_DisplaysFormWithNameAndPrice()
         {
             var context = GetDbContext();

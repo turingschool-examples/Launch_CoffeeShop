@@ -14,10 +14,11 @@
 
             foreach(var order in Orders)
             {
-                foreach(var item in order.Items)
-                {
-                    sum += item.PriceInCents;
-                }
+                //foreach(var item in order.Items)
+                //{
+                //    sum += item.PriceInCents;
+                //}
+                sum += order.TotalPrice();
             }
             return $"${Math.Round(Convert.ToDouble(sum) / 100,2)}";
         }

@@ -64,6 +64,24 @@ namespace CoffeeShopTests
             Assert.Contains("Price", html);
 
         }
+
+        [Fact]
+        public async Task Create_AddsItemToDB()
+        {
+            var client = _factory.CreateClient();
+
+            var addItemFormData = new Dictionary<string, string>
+            {
+                {"Name", "Dirt" },
+                {"PriceInCents", "100" }
+            };
+            
+            var response = await client.PostAsync("/items", new FormUrlEncodedContent(addItemFormData));
+            var html = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains("Dirt", html);
+            Assert.Contains("1", html);
+        }
     }
 }
 

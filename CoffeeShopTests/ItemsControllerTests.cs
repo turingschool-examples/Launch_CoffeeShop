@@ -146,6 +146,32 @@ namespace CoffeeShopTests
 
         }
 
+        [Fact]
+        public async Task Update_SavesItemChanges()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            Item dirt = new Item { Name = "Dirt", PriceInCents = 100 };
+            context.Add(dirt);
+            context.SaveChanges();
+
+            var addItemFormData = new Dictionary<string, string>
+            {
+                {"Name", "Sand" },
+                {"PriceInCents", "120" }
+            };
+
+            var response = await client.PostAsync($"/items/{dirt.Id}", new FormUrlEncodedContent(addItemFormData));
+            var html = await response.Content.ReadAsStringAsync();
+
+            response.EnsureSuccessStatusCode();
+
+            Assert.Contains("Sand", html);
+            Assert.Contains("1.2", html);
+            Assert.DoesNotContain("Dirt", html);
+            Assert.DoesNotContain("1.00", html);
+        }
 
     }
 }

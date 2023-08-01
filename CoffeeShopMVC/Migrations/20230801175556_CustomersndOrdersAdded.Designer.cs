@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CoffeeShopMVC.Migrations
 {
     [DbContext(typeof(CoffeeShopMVCContext))]
-    [Migration("20230801173458_CustomersandOrders")]
-    partial class CustomersandOrders
+    [Migration("20230801175556_CustomersndOrdersAdded")]
+    partial class CustomersndOrdersAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,9 +45,9 @@ namespace CoffeeShopMVC.Migrations
                         .HasColumnName("name");
 
                     b.HasKey("Id")
-                        .HasName("pk_customer");
+                        .HasName("pk_customers");
 
-                    b.ToTable("customer", (string)null);
+                    b.ToTable("customers", (string)null);
                 });
 
             modelBuilder.Entity("CoffeeShopMVC.Models.Item", b =>
@@ -64,7 +64,7 @@ namespace CoffeeShopMVC.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<int?>("OrderId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("integer")
                         .HasColumnName("order_id");
 
@@ -99,12 +99,12 @@ namespace CoffeeShopMVC.Migrations
                         .HasColumnName("date_created");
 
                     b.HasKey("Id")
-                        .HasName("pk_order");
+                        .HasName("pk_orders");
 
                     b.HasIndex("CustomerId")
-                        .HasDatabaseName("ix_order_customer_id");
+                        .HasDatabaseName("ix_orders_customer_id");
 
-                    b.ToTable("order", (string)null);
+                    b.ToTable("orders", (string)null);
                 });
 
             modelBuilder.Entity("CoffeeShopMVC.Models.Item", b =>
@@ -112,7 +112,9 @@ namespace CoffeeShopMVC.Migrations
                     b.HasOne("CoffeeShopMVC.Models.Order", "Order")
                         .WithMany("Items")
                         .HasForeignKey("OrderId")
-                        .HasConstraintName("fk_items_order_order_id");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_items_orders_order_id");
 
                     b.Navigation("Order");
                 });
@@ -124,7 +126,7 @@ namespace CoffeeShopMVC.Migrations
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_order_customer_customer_id");
+                        .HasConstraintName("fk_orders_customers_customer_id");
 
                     b.Navigation("Customer");
                 });

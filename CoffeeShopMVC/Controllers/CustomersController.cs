@@ -27,7 +27,7 @@ namespace CoffeeShopMVC.Controllers
         }
 
         [HttpPost]
-        [Route("/customer/create")]
+        [Route("/customers/create")]
         public IActionResult Create(Customer customer)
         {
             _context.Customers.Add(customer);

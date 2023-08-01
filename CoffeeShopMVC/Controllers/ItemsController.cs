@@ -36,6 +36,21 @@ namespace CoffeeShopMVC.Controllers
             return RedirectToAction("index");
         }
 
+        public IActionResult New()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        public IActionResult Create(Item item)
+        {
+            
+            _context.Items.Add(item);
+            _context.SaveChanges();
+            var newItemId = item.Id;
+            return RedirectToAction("index", new { id = newItemId });
+        }
+
         [Route("/items/edit/{itemId:int}")]
         public IActionResult Edit(int itemId)
         {

@@ -47,8 +47,22 @@ namespace CoffeeShopTests
             Assert.Contains("Dirt", html);
             Assert.Contains("Sand", html);
 
-            // Make sure it does not hit actual database
+            
             Assert.DoesNotContain("Coffeeeee", html);
+        }
+        [Fact]
+        public async Task New_ShowsNewForm()
+        {
+            var client = _factory.CreateClient();
+
+            var response = await client.GetAsync("/Items/new");
+            var html = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains("<form method=\"post\" action=\"/items\">", html);
+            Assert.Contains("<button type=\"submit\">Add Item</button>", html);
+            Assert.Contains("Name", html);
+            Assert.Contains("Price", html);
+
         }
     }
 }

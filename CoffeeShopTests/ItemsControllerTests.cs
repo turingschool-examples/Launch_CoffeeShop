@@ -84,6 +84,50 @@ namespace CoffeeShopTests
             Assert.Contains($"<form method=\"post\" action=\"/items/create\">", html);
         }
 
+        [Fact]
+        public async Task Edit_ReturnsPopulatedForm()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            var item = new Item { Name = "Espresso", PriceInCents = 225 };
+            context.Items.Add(item);
+            context.SaveChanges();
+
+            var response = await client.GetAsync($"/items/edit/{item.Id}");
+            var html = await response.Content.ReadAsStringAsync();
+
+            response.EnsureSuccessStatusCode();
+            Assert.Contains("Espresso", html);
+            Assert.Contains("225", html);
+            Assert.Contains($"<form method=\"post\" action=\"/items/update/{item.Id}\">", html);
+        }
+
+        [Fact]
+        public async Task Update_UpdatesItemInDatabase()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            var coffee = new Item { Name = "Iced Coffee", PriceInCents = 825 };
+            context.Items.Add(coffee);
+            context.SaveChanges();
+
+            var formData = new Dictionary<string, string>
+            {
+                { "Name", "Coffee on the Rocks" },
+                { "PriceInCents", "799" }
+            };
+
+            var response = await client.PostAsync($"/items/update/{coffee.Id}", new FormUrlEncodedContent(formData));
+            var html = await response.Content.ReadAsStringAsync();
+
+            response.EnsureSuccessStatusCode();
+            Assert.Contains("Coffee on the Rocks", html);
+            Assert.Contains("$7.99", html);
+            Assert.DoesNotContain("Iced Coffee", html);
+        }
+
         private CoffeeShopMVCContext GetDbContext()
         {
             var optionsBuilder = new DbContextOptionsBuilder<CoffeeShopMVCContext>();

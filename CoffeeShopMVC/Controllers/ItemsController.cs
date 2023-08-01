@@ -35,10 +35,12 @@ namespace CoffeeShopMVC.Controllers
 
             return RedirectToAction("index");
         }
+
         public IActionResult New()
         {
             return View();
         }
+        
         [HttpPost]
         public IActionResult Create(Item item)
         {
@@ -49,5 +51,21 @@ namespace CoffeeShopMVC.Controllers
             return RedirectToAction("index", new { id = newItemId });
         }
 
+        [Route("/items/edit/{itemId:int}")]
+        public IActionResult Edit(int itemId)
+        {
+            var item = _context.Items.Find(itemId);
+            return View(item);
+        }
+
+        [HttpPost]
+        public IActionResult Update(Item item, int id)
+        {
+            item.Id = id;
+            _context.Items.Update(item);
+            _context.SaveChanges();
+
+            return Redirect($"/items/details/{item.Id}");
+        }
     }
 }

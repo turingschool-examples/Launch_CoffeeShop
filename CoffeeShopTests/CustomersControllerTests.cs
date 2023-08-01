@@ -48,5 +48,37 @@ namespace CoffeeShopTests
             Assert.DoesNotContain(customer1.Email, html);
             Assert.DoesNotContain(customer2.Email, html);
         }
+
+        [Fact]
+        public async Task New_DisplaysFormWithNameAndEmail()
+        {
+            var client = _factory.CreateClient();
+
+
+            var response = await client.GetAsync("/customers/new");
+            response.EnsureSuccessStatusCode();
+
+            var html = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains("<form method=\"post\" action=\"/customers/create\">", html);
+            Assert.Contains("<input type=\"text\" id=\"Name\" name=\"Name\" required />", html);
+            Assert.Contains("<input type=\"email\" id=\"Email\" name=\"Email\" required />", html);
+        }
+
+        [Fact]
+        public async Task Create_AddsCustomerToDatabase()
+        {
+            var client = _factory.CreateClient();
+            var formData = new Dictionary<string, string>
+            {
+                {"Name","Eli" },
+                {"Email","Eli@gmail" }
+            };
+
+            var response = await client.PostAsync($"/customers/create", new FormUrlEncodedContent(formData));
+            var html = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains("Eli", html);
+        }
     }
 }

@@ -18,9 +18,11 @@ namespace CoffeeShopMVC.Controllers
             return View();
         }
 
-        public IActionResult New()
+        public IActionResult New(Customer customer)
         {
-            return View();
+            _context.Customers.Add(customer);
+            _context.SaveChanges();
+            return View(customer);
         }
 
         [Route("Customers/{id:int}")]

@@ -12,9 +12,11 @@ namespace CoffeeShopMVC.Controllers
         {
             _context = context;
         }
+        
         public IActionResult Index()
         {
-            return View();
+            var customers = _context.Customers.ToList();
+            return View(customers);
         }
     }
 }

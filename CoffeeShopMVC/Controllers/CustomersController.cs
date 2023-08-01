@@ -16,7 +16,8 @@ namespace CoffeeShopMVC.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var customers = _context.Customers.ToList();
+            return View(customers);
         }
 
 

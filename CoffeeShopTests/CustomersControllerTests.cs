@@ -26,7 +26,6 @@ namespace CoffeeShopTests
 
             return context;
         }
-
         [Fact]
         public async Task Index_ShowsListOfAllCustomers()
         {

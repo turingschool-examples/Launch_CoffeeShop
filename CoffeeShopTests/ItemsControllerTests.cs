@@ -33,14 +33,14 @@ namespace CoffeeShopTests
         public async Task Index_ShowsItems()
         {
             var context = GetDbContext();
-            
+
 
             context.Items.Add(new Item { Name = "Dirt", PriceInCents = 10000 });
             context.Items.Add(new Item { Name = "Sand", PriceInCents = 5000 });
             context.SaveChanges();
-            
+
             var client = _factory.CreateClient();
-            
+
             var response = await client.GetAsync("/Items");
             var html = await response.Content.ReadAsStringAsync();
 
@@ -48,7 +48,7 @@ namespace CoffeeShopTests
             Assert.Contains("Dirt", html);
             Assert.Contains("Sand", html);
 
-            
+
             Assert.DoesNotContain("Coffeeeee", html);
         }
         [Fact]
@@ -77,7 +77,7 @@ namespace CoffeeShopTests
                 {"Name", "Dirt" },
                 {"PriceInCents", "100" }
             };
-            
+
             var response = await client.PostAsync("/items", new FormUrlEncodedContent(addItemFormData));
             var html = await response.Content.ReadAsStringAsync();
 
@@ -122,5 +122,30 @@ namespace CoffeeShopTests
             response.EnsureSuccessStatusCode();
             Assert.DoesNotContain("Dirt", html);
         }
+
+        [Fact]
+
+        public async Task Edit_ReturnsEditForm()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            Item dirt = new Item { Name = "Dirt", PriceInCents = 100 };
+            context.Add(dirt);
+            context.SaveChanges();
+
+            var response = await client.PostAsync($"/items/{dirt.Id}/edit", null);
+            var html = await response.Content.ReadAsStringAsync();
+
+            response.EnsureSuccessStatusCode();
+
+            Assert.Contains("Dirt", html);
+            Assert.Contains("<form method=\"post\" action=\"/items/1\">", html);
+            Assert.Contains("<button type=\"submit\">Save Changes</button>", html);
+            Assert.Contains("<button type=\"submit\">Go Back to Items List</button>", html);
+
+        }
+
+
     }
 }

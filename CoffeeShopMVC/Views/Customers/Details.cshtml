@@ -7,3 +7,12 @@
 <p>Name: @Model.Name</p>
 
 <p>Email: @Model.Email</p>
+
+<form method="post" action="/customers/delete/@Model.Id">
+    <div class="deletebutton">
+
+        <button type="submit">DELETE</button>
+
+    </div>
+
+</form>

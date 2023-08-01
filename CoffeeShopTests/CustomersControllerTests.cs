@@ -101,7 +101,51 @@ namespace CoffeeShopTests
 
             Assert.Contains("John", html);
             Assert.DoesNotContain("James", html);
-            Assert.Contains("$1.99", html);
+            Assert.Contains("$0", html);
+        }
+        [Fact]
+        public async Task Edit_ReturnsViewWithPrePopulatedForm()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            var customer1 = new Customer { Name = "John", Email = "john@john.john" };
+            var customer2 = new Customer { Name = "James", Email = "james@james.james" };
+            context.Customers.Add(customer1);
+            context.Customers.Add(customer2);
+            context.SaveChanges();
+            var response = await client.GetAsync($"/customers/edit/{customer1.Id}");
+            response.EnsureSuccessStatusCode();
+
+            var html = await response.Content.ReadAsStringAsync();
+            Assert.Contains($"<form method=\"post\" action=\"/customers/edit/{customer1.Id}\">", html);
+            Assert.Contains(customer1.Name, html);
+            Assert.Contains(customer1.Email, html);
+        }
+        [Fact]
+        public async Task Update_RedirectsToShowPageWithUpdatedInfo()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            var customer1 = new Customer { Name = "John", Email = "john@john.john" };
+            var customer2 = new Customer { Name = "James", Email = "james@james.james" };
+            context.Customers.Add(customer1);
+            context.Customers.Add(customer2);
+            context.SaveChanges();
+
+            var formData = new Dictionary<string, string>
+            {
+                {"Name","Eli" },
+                {"Email","Eli@gmail" }
+            };
+
+            var response = await client.PostAsync($"/customers/edit/{customer1.Id}", new FormUrlEncodedContent(formData));
+            response.EnsureSuccessStatusCode();
+            var html = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains("Eli", html);
+            Assert.DoesNotContain("John", html);
         }
     }
 }

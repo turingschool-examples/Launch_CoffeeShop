@@ -1,0 +1,15 @@
+﻿@model Customer
+
+<form method="post" action="/customers/edit/@Model.Id">
+    <div>
+        <label for="Name">Name</label>
+        <input type="text" id="Name" name="Name" value="@Model.Name" required />
+    </div>
+    <div>
+        <label for="Email">Email</label>
+        <input type="email" id="Email" name="Email" value="@Model.Email" required />
+    </div>
+    <div>
+        <button type="submit">Update Account</button>
+    </div>
+</form>

@@ -5,7 +5,16 @@
 <ul>
     @foreach (var customer in Model)
     {
-        <li>@customer.Name: @customer.Email</li>
+        <li><a href="/customers/details/@customer.Id>">@customer.Name</a>: @customer.Email</li>
     }
 
 </ul>
+
+<form method="get" action="/customers/new">
+    <div class="newbutton">
+
+        <button type="submit">Add Customer</button>
+
+    </div>
+
+</form>

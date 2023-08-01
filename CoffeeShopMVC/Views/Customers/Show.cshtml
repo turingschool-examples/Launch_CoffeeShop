@@ -8,3 +8,10 @@
 {
     <p>@item</p>
 }
+
+@if(Model.Orders.Count() == 0)
+{
+    <form method="post" action="/customers/delete/@Model.Id">
+        <button type="submit">Delete</button>    
+    </form>
+}

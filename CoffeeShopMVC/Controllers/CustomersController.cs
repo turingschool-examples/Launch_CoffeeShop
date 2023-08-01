@@ -61,5 +61,16 @@ namespace CoffeeShopMVC.Controllers
             _context.SaveChanges();
             return Redirect($"/customers/details/{customerId}");
         }
+
+        [HttpPost]
+        [Route("/customers/delete/{customerId:int}")]
+        public IActionResult Delete(int customerId)
+        {
+            var customer = _context.Customers.Find(customerId);
+            _context.Customers.Remove(customer);
+            _context.SaveChanges();
+
+            return Redirect("/customers");
+        }
     }
 }

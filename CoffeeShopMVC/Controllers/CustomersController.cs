@@ -42,7 +42,7 @@ namespace CoffeeShopMVC.Controllers
             return View(customer);
         }
 
-        [Route("/customers/{id:int}/edit")]
+        [Route("/customers/edit/{id:int}")]
         public IActionResult Edit(int id)
         {
             var c = _context.Customers.Find(id);

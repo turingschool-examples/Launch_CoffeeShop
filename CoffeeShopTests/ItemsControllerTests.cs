@@ -59,7 +59,7 @@ namespace CoffeeShopTests
             var html = await response.Content.ReadAsStringAsync();
 
             Assert.Contains("<form method=\"post\" action=\"/items\">", html);
-            Assert.Contains("<button type=\"submit\">Add Item</button>", html);
+            Assert.Contains("<button type=\"submit\" >Add Item</button>", html);
             Assert.Contains("Name", html);
             Assert.Contains("Price", html);
 

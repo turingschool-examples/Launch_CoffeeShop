@@ -1,0 +1,13 @@
+﻿@model Item
+
+<h1>Edit @Model.Name</h1>
+
+<form method="post" action="/items/update/@Model.Id">
+	<label for="name">Name:</label>
+	<input type="text" id="name" name="Name" value="@Model.Name" /><br /><br />
+	
+	<label for="price">PriceInCents:</label>
+	<input type="number" id="price" name="PriceInCents" value="@Model.PriceInCents" /><br /><br />
+
+	<button type="submit">Update Item</button>
+</form>

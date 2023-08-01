@@ -17,5 +17,11 @@ namespace CoffeeShopMVC.Controllers
         {
             return View();
         }
+
+        public IActionResult Delete(int id)
+        {
+            _context.Customers.Find(id);
+            return Redirect("/customers");
+        }
     }
 }

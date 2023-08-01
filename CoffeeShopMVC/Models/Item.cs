@@ -6,6 +6,7 @@
         public string Name { get; set; }
         public int PriceInCents { get; set; }
 
+
         public double PriceInDollars()
         {
             return Convert.ToDouble(PriceInCents) / 100;

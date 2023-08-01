@@ -35,7 +35,7 @@ namespace CoffeeShopMVC.Controllers
             return RedirectToAction("details", new { id = customerId });
         }
 
-        [Route("Customers/{id:int}")]
+        [Route("Customers/details/{id:int}")]
         public IActionResult Details(int id)
         {
             var customer = _context.Customers.Find(id);

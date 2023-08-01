@@ -147,5 +147,79 @@ namespace CoffeeShopTests
             Assert.Contains("Eli", html);
             Assert.DoesNotContain("John", html);
         }
+
+        [Fact]
+        public async Task Delete_NoButtonWhenCustomerHasOrder()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            var customer1 = new Customer { Name = "John", Email = "john@john.john" };
+            var customer2 = new Customer { Name = "James", Email = "james@james.james" };
+
+            var order1 = new Order { DateCreated = new DateTime(2000, 1, 1).ToUniversalTime() };
+            customer1.Orders.Add(order1);
+           // customer1.Orders.Add(new Order { DateCreated = new DateTime(2000, 1, 1).ToUniversalTime() });
+
+            context.Customers.Add(customer1);
+            context.Customers.Add(customer2);
+            context.SaveChanges();
+
+            var response = await client.GetAsync($"/customers/details/{customer1.Id}");
+            response.EnsureSuccessStatusCode();
+
+            var html = await response.Content.ReadAsStringAsync();
+
+            Assert.DoesNotContain("Delete", html);
+
+        }
+        [Fact]
+        public async Task Delete_ButtonWhenCustomerHasNoOrder()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            var customer1 = new Customer { Name = "John", Email = "john@john.john" };
+            var customer2 = new Customer { Name = "James", Email = "james@james.james" };
+            context.Customers.Add(customer1);
+            context.Customers.Add(customer2);
+            context.SaveChanges();
+
+            var response = await client.GetAsync($"/customers/details/{customer1.Id}");
+            response.EnsureSuccessStatusCode();
+
+            var html = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains("Delete", html);
+
+        }
+
+        [Fact]
+        public async Task Delete_RemovesCustomerAndRedirectsToIndex()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            var customer1 = new Customer { Name = "John", Email = "john@john.john" };
+            var customer2 = new Customer { Name = "James", Email = "james@james.james" };
+            context.Customers.Add(customer1);
+            context.Customers.Add(customer2);
+            context.SaveChanges();
+
+            var formData = new Dictionary<string, string>
+            {
+           
+            };
+
+            var response = await client.PostAsync($"/customers/delete/{customer1.Id}", new FormUrlEncodedContent(formData));
+            response.EnsureSuccessStatusCode();
+
+            var html = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains("James", html);
+            Assert.Contains("All Customers", html);
+            Assert.DoesNotContain("John", html);
+
+        }
     }
 }

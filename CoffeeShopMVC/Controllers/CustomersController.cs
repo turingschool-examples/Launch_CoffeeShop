@@ -1,4 +1,4 @@
-﻿using CoffeeShopMVC.DataAccess;
+using CoffeeShopMVC.DataAccess;
 using Microsoft.AspNetCore.Mvc;
 using CoffeeShopMVC.Models;
 
@@ -16,6 +16,18 @@ namespace CoffeeShopMVC.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult New()
+        {
+            return View();
+        }
+
+        [Route("Customers/{id:int}")]
+        public IActionResult Details(int id)
+        {
+            var customer = _context.Customers.Find(id);
+            return View(customer);
         }
 
         [Route("/customers/{id:int}/edit")]

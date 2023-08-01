@@ -1,0 +1,69 @@
+﻿using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
+using CoffeeShopMVC.Models;
+using CoffeeShopMVC.DataAccess;
+using CoffeeShopMVC.FeatureTests;
+using System.Runtime.CompilerServices;
+
+namespace CoffeeShopTests
+{
+    [Collection("Customers Controller Tests")]
+    public class CoffeeShopMVCCustomersTests : IClassFixture<WebApplicationFactory<Program>>
+    {
+        private readonly WebApplicationFactory<Program> _factory;
+
+        public CoffeeShopMVCCustomersTests(WebApplicationFactory<Program> factory)
+        {
+            _factory = factory;
+        }
+        private CoffeeShopMVCContext GetDbContext()
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<CoffeeShopMVCContext>();
+            optionsBuilder.UseInMemoryDatabase("TestDatabase");
+
+            var context = new CoffeeShopMVCContext(optionsBuilder.Options);
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+
+            return context;
+        }
+        [Fact]
+        public async Task Index_ShowsItems()
+        {
+            var context = GetDbContext();
+
+
+            context.Customers.Add(new Customer { Name = "DirtDrinker", Email = "DirtDrinker@gmail.com" });
+            context.Customers.Add(new Customer { Name = "SandEater", Email = "SandEater@gmail.com" });
+            context.SaveChanges();
+
+            var client = _factory.CreateClient();
+
+            var response = await client.GetAsync("/Customers");
+            var html = await response.Content.ReadAsStringAsync();
+
+            response.EnsureSuccessStatusCode();
+            Assert.Contains("DirtDrinker", html);
+            Assert.Contains("SandEater", html);
+
+
+            Assert.DoesNotContain("CoffeeDrinker", html);
+        }
+
+        [Fact]
+        public async Task New_ShowsNewForm()
+        {
+            var client = _factory.CreateClient();
+
+            var response = await client.GetAsync("/Customers/new");
+            var html = await response.Content.ReadAsStringAsync();
+
+            response.EnsureSuccessStatusCode();
+            Assert.Contains("<form id=\"new-customer-form\" method=\"post\" action=\"/customers\">", html);
+            Assert.Contains("<button type=\"submit\">Add Customer</button>", html);
+            Assert.Contains("Name", html);
+            Assert.Contains("Email", html);
+
+        }
+    }
+}

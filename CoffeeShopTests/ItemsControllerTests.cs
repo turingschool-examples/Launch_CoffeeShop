@@ -9,12 +9,12 @@ using System.Runtime.CompilerServices;
 namespace CoffeeShopTests
 {
 
-    [Collection("States Controller Tests")]
-    public class CoffeeShopMVCTests : IClassFixture<WebApplicationFactory<Program>>
+    [Collection("Items Controller Tests")]
+    public class CoffeeShopMVCItemsTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly WebApplicationFactory<Program> _factory;
 
-        public CoffeeShopMVCTests(WebApplicationFactory<Program> factory)
+        public CoffeeShopMVCItemsTests(WebApplicationFactory<Program> factory)
         {
             _factory = factory;
         }
@@ -134,13 +134,13 @@ namespace CoffeeShopTests
             context.Add(dirt);
             context.SaveChanges();
 
-            var response = await client.PostAsync($"/items/{dirt.Id}/edit", null);
+            var response = await client.PostAsync($"/items/edit/{dirt.Id}", null);
             var html = await response.Content.ReadAsStringAsync();
 
             response.EnsureSuccessStatusCode();
 
             Assert.Contains("Dirt", html);
-            Assert.Contains("<form method=\"post\" action=\"/items/1\">", html);
+            Assert.Contains("<form method=\"post\" action=\"/items/details/1\">", html);
             Assert.Contains("<button type=\"submit\">Save Changes</button>", html);
             Assert.Contains("<button type=\"submit\">Go Back to Items List</button>", html);
 

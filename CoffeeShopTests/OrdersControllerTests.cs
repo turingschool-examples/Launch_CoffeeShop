@@ -54,5 +54,35 @@ namespace CoffeeShopTests
             Assert.Contains("Items: 2", html);
             Assert.Contains(order1.DateCreated.ToString("mm-dd-yy"), html);
         }
+
+        [Fact]
+        public async Task Show_ReturnsViewWithInfoOnSingleOrder()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            var customer1 = new Customer { Name = "John", Email = "john@john.john" };
+            var customer2 = new Customer { Name = "James", Email = "james@james.james" };
+            var order1 = new Order { DateCreated = new DateTime(2000, 2, 1).ToUniversalTime() };
+            Item item1 = new Item { Name = "Coffee", PriceInCents = 299 };
+            Item item2 = new Item { Name = "Donut", PriceInCents = 199 };
+            order1.Items.Add(item1);
+            order1.Items.Add(item2);
+            customer1.Orders.Add(order1);
+            context.Customers.Add(customer1);
+            context.Customers.Add(customer2);
+            context.SaveChanges();
+
+            var response = await client.GetAsync("/customers/1/orders/details/1");
+            response.EnsureSuccessStatusCode();
+
+            var html = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains("Coffee", html);
+            Assert.Contains("Donut", html);
+            Assert.Contains("$4.98", html);
+            Assert.Contains(order1.Id.ToString(), html);
+
+        }
     }
 }

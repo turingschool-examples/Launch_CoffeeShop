@@ -58,7 +58,7 @@ namespace CoffeeShopMVC.Controllers
             _context.Customers.Update(customer);
             _context.SaveChanges();
 
-            return Redirect($"/customers/{customer.Id}");
+            return RedirectToAction("details", new { Id = customer.Id });
         }
 
         public IActionResult Delete(int id)

@@ -126,8 +126,7 @@ namespace CoffeeShopTests
                 {"Email", "teachpuff600@gmail.com" }
             };
 
-                var response = await client.PutAsync($"/customers/{customer.Id}", new FormUrlEncodedContent(addItemFormData));
-
+                var response = await client.PostAsync($"/customers/{customer.Id}", new FormUrlEncodedContent(addItemFormData));
                 var html = await response.Content.ReadAsStringAsync();
 
                 response.EnsureSuccessStatusCode();
@@ -161,7 +160,7 @@ namespace CoffeeShopTests
             Assert.Contains("DirtDrinker@gmail.com", html);
         }
 
-            [Fact]
+        [Fact]
         public async Task Delete_RemovesCustomer()
         {
             var context = GetDbContext();
@@ -177,8 +176,7 @@ namespace CoffeeShopTests
             response.EnsureSuccessStatusCode();
             Assert.DoesNotContain("john doe", html);
         }
-
-        }
     }
+}
 
 

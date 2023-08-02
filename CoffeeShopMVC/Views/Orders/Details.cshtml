@@ -1,0 +1,18 @@
+﻿@model Order
+
+@{
+    List<Item> items = ViewData["stock"] as List<Item>;
+}
+
+<h1>Order#@Model.Id</h1>
+
+
+<ul>
+@foreach(var item in Model.ListOfItems)
+{
+    <li>@item.Name: @item.PriceInDollars()</li>
+}
+</ul>
+<form action="/items/shop">
+    <button type="submit">Shop Items</button>
+</form>

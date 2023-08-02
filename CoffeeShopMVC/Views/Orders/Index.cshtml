@@ -1,0 +1,7 @@
+﻿@model Customer
+
+<h1>@Model.Name's Orders</h1>
+
+@foreach(var order in Model.Orders){
+    <p><a href="/customers/@Model.Id/orders/details/@order.Id">@order.DateCreated.ToString("mm-dd-yy")</a> Items: @order.Items.Count()</p>
+}

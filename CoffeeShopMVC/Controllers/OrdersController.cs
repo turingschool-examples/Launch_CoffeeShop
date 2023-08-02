@@ -1,5 +1,6 @@
 ﻿using CoffeeShopMVC.DataAccess;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CoffeeShopMVC.Controllers
 {
@@ -12,9 +13,11 @@ namespace CoffeeShopMVC.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        [Route("/customers/{customerId:int}/orders")]
+        public IActionResult Index(int customerId)
         {
-            return View();
+            var customer = _context.Customers.Where(c => c.Id == customerId).Include(c => c.Orders).First();
+            return View(customer);
         }
     }
 }

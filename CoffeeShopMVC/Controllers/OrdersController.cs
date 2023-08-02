@@ -16,7 +16,7 @@ namespace CoffeeShopMVC.Controllers
         [Route("/customers/{customerId:int}/orders")]
         public IActionResult Index(int customerId)
         {
-            var customer = _context.Customers.Where(c => c.Id == customerId).Include(c => c.Orders).First();
+            var customer = _context.Customers.Where(c => c.Id == customerId).Include(c => c.Orders).ThenInclude(o => o.Items).First();
             return View(customer);
         }
     }

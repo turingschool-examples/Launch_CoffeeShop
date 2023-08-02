@@ -40,7 +40,7 @@ namespace CoffeeShopMVC.Controllers
         [Route("/customers/details/{id:int}")]
         public IActionResult Show(int id)
         {
-            var customer = _context.Customers.Include(c => c.Orders).Where(c => c.Id == id).Single();
+            var customer = _context.Customers.Include(c => c.Orders).ThenInclude(o => o.Items).Where(c => c.Id == id).Single();
 
             return View(customer);
         }

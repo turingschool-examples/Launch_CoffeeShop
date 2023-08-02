@@ -120,13 +120,13 @@ namespace CoffeeShopTests
                 context.Add(customer);
                 context.SaveChanges();
 
-                var addItemFormData = new Dictionary<string, string>
+                var addCustomerFormData = new Dictionary<string, string>
             {
                 {"Name", "Mrs. Puff" },
                 {"Email", "teachpuff600@gmail.com" }
             };
 
-                var response = await client.PostAsync($"/customers/{customer.Id}", new FormUrlEncodedContent(addItemFormData));
+                var response = await client.PostAsync($"/customers/{customer.Id}", new FormUrlEncodedContent(addCustomerFormData));
                 var html = await response.Content.ReadAsStringAsync();
 
                 response.EnsureSuccessStatusCode();

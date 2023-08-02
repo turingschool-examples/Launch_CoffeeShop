@@ -85,6 +85,7 @@ namespace CoffeeShopTests
 
         }
 
+
         [Fact]
         public async Task New_DisplaysFormWithDateCreated()
         {
@@ -128,5 +129,62 @@ namespace CoffeeShopTests
 
             Assert.Contains("00-01-02", html);
         }
+
+        //[Fact]
+        //public async Task Edit_ReturnsViewWithPrePopulatedForm()
+        //{
+        //    var context = GetDbContext();
+        //    var client = _factory.CreateClient();
+
+        //    var customer1 = new Customer { Name = "John", Email = "john@john.john" };
+        //    var customer2 = new Customer { Name = "James", Email = "james@james.james" };
+        //    var order1 = new Order { DateCreated = new DateTime(2000, 2, 1).ToUniversalTime() };
+        //    Item item1 = new Item { Name = "Coffee", PriceInCents = 299 };
+        //    Item item2 = new Item { Name = "Donut", PriceInCents = 199 };
+        //    order1.Items.Add(item1);
+        //    order1.Items.Add(item2);
+        //    customer1.Orders.Add(order1);
+        //    context.Customers.Add(customer1);
+        //    context.Customers.Add(customer2);
+        //    context.SaveChanges();
+
+        //    var response = await client.GetAsync("/customers/1/orders/edit/1");
+        //    response.EnsureSuccessStatusCode();
+
+        //    var html = await response.Content.ReadAsStringAsync();
+        //    Assert.Contains("<form method=\"post\" action=\"/customers/1/orders/details/1\">", html);
+        //    Assert.Contains("2000", html);
+        //}
+
+        //[Fact]
+        //public async Task Update_RedirectsToShowPageWithUpdatedInfo()
+        //{
+        //    var context = GetDbContext();
+        //    var client = _factory.CreateClient();
+
+        //    var customer1 = new Customer { Name = "John", Email = "john@john.john" };
+        //    var customer2 = new Customer { Name = "James", Email = "james@james.james" };
+        //    var order1 = new Order { DateCreated = new DateTime(2000, 2, 1).ToUniversalTime() };
+        //    Item item1 = new Item { Name = "Coffee", PriceInCents = 299 };
+        //    Item item2 = new Item { Name = "Donut", PriceInCents = 199 };
+        //    order1.Items.Add(item1);
+        //    order1.Items.Add(item2);
+        //    customer1.Orders.Add(order1);
+        //    context.Customers.Add(customer1);
+        //    context.Customers.Add(customer2);
+        //    context.SaveChanges();
+
+        //    var formdata = new Dictionary<string, string>
+        //    {
+        //        {"DateCreated", $"{new DateTime(2010, 2, 1).ToUniversalTime()}" }
+        //    };
+
+        //    var response = await client.PostAsync("/customers/1/orders/details/1", new FormUrlEncodedContent(formdata));
+        //    response.EnsureSuccessStatusCode();
+
+        //    var html = await response.Content.ReadAsStringAsync();
+        //    Assert.Contains("10", html);
+        //    Assert.DoesNotContain("00<", html);
+        //}
     }
 }

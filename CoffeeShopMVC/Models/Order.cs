@@ -16,5 +16,10 @@
             }
             return sum;
         }
+
+        public string TotalPriceInDollars()
+        {
+            return $"${Math.Round(Convert.ToDouble(TotalPrice()) / 100, 2)}";
+        }
     }
 }

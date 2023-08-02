@@ -1,0 +1,10 @@
+﻿@model Order
+
+<h1>Order Number: @Model.Id</h1>
+<h3>Ordered On: @Model.DateCreated.ToString("mm-dd-yy")</h3>
+
+@foreach (var item in Model.Items)
+{
+    <p>@item.Name: @item.PriceInDollars()</p>
+}
+<p><strong>Total:</strong>@Model.TotalPriceInDollars()</p>

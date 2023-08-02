@@ -84,5 +84,49 @@ namespace CoffeeShopTests
             Assert.Contains(order1.Id.ToString(), html);
 
         }
+
+        [Fact]
+        public async Task New_DisplaysFormWithDateCreated()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            var customer1 = new Customer { Name = "John", Email = "john@john.john" };
+            var order1 = new Order { DateCreated = new DateTime(2000, 2, 1).ToUniversalTime() };
+            customer1.Orders.Add(order1);
+            context.Customers.Add(customer1);
+            context.SaveChanges();
+
+            context.SaveChanges();
+
+            var response = await client.GetAsync($"/customers/1/orders/new");
+            response.EnsureSuccessStatusCode();
+
+            var html = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains("<form method=\"post\" action=\"/customers/1/orders\">", html);
+            Assert.Contains("<input type=\"date\" id=\"DateCreated\" name=\"DateCreated\" required />", html);
+        }
+
+        [Fact]
+        public async Task Create_AddsOrderToDB()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+            var customer1 = new Customer { Name = "John", Email = "john@john.john" };
+            context.Customers.Add(customer1);
+            context.SaveChanges();
+
+            var formData = new Dictionary<string, string>
+            {
+                {"DateCreated","01-01-02" }
+            };
+
+
+            var response = await client.PostAsync($"/customers/{customer1.Id}/orders", new FormUrlEncodedContent(formData));
+            var html = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains("00-01-02", html);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CoffeeShopMVC.DataAccess;
+using CoffeeShopMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,6 +27,25 @@ namespace CoffeeShopMVC.Controllers
             var customer = _context.Customers.Where(c => c.Id == customerId).Include(c => c.Orders).ThenInclude(o => o.Items).First();
             var order = customer.Orders.Where(o => o.Id == orderId).First();
             return View(order);
+        }
+
+        [Route("/customers/{customerId:int}/orders/new")]
+        public IActionResult New(int customerId)
+        {
+            var customer = _context.Customers.Where(c => c.Id == customerId).Include(c => c.Orders).First();
+            return View(customer);
+        }
+
+        [HttpPost]
+        [Route("/customers/{customerId:int}/orders")]
+        public IActionResult Create(Order order, int customerId)
+        {
+            var customer = _context.Customers.Where(c => c.Id == customerId).Include(c => c.Orders).ThenInclude(o => o.Items).First();
+            order.DateCreated = order.DateCreated.ToUniversalTime();
+            customer.Orders.Add(order);
+            _context.SaveChanges();
+
+            return Redirect($"/customers/{customer.Id}/orders");
         }
     }
 }

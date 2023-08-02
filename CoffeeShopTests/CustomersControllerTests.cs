@@ -126,7 +126,7 @@ namespace CoffeeShopTests
                 {"Email", "teachpuff600@gmail.com" }
             };
 
-                var response = await client.PostAsync($"/customers/{customer.Id}", new FormUrlEncodedContent(addItemFormData));
+                var response = await client.PostAsync($"/customers/{customer.Id}", new FormUrlEncodedContent(addCustomerFormData));
                 var html = await response.Content.ReadAsStringAsync();
 
                 response.EnsureSuccessStatusCode();

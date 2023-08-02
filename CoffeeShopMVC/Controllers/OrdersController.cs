@@ -72,5 +72,14 @@ namespace CoffeeShopMVC.Controllers
             return Redirect($"/customers/{customerId}/orders/details/{orderId}");
         }
 
+        [HttpPost]
+        [Route("/customers/{customerId:int}/orders/delete/{orderId:int}")]
+        public IActionResult Delete(int customerId, int orderId)
+        {
+            var order = _context.Orders.Find(orderId);
+            _context.Orders.Remove(order);
+            _context.SaveChanges();
+            return Redirect($"/customers/{customerId}/orders");
+        }
     }
 }

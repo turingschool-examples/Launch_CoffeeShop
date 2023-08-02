@@ -240,5 +240,30 @@ namespace CoffeeShopTests
 
             Assert.DoesNotContain(">Delete", html);
         }
+
+        [Fact]
+        public async Task Delete_RemovesOrderAndRedirectsToIndex()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            var customer1 = new Customer { Name = "John", Email = "john@john.john" };
+            var order1 = new Order { DateCreated = new DateTime(2000, 2, 1).ToUniversalTime() };
+            customer1.Orders.Add(order1);
+            context.Customers.Add(customer1);
+            context.SaveChanges();
+
+            var formdata = new Dictionary<string, string>
+            {
+
+            };
+
+            var response = await client.PostAsync($"/customers/{customer1.Id}/orders/delete/{order1.Id}", new FormUrlEncodedContent(formdata));
+            response.EnsureSuccessStatusCode();
+
+            var html = await response.Content.ReadAsStringAsync();
+
+            Assert.DoesNotContain("00", html);
+        }
     }
 }

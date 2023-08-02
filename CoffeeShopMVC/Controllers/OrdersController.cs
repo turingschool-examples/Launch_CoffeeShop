@@ -15,8 +15,12 @@ namespace CoffeeShopMVC.Controllers
         }
 
         [Route("/customers/{customerId:int}/orders")]
-        public IActionResult Index(int customerId)
+        public IActionResult Index(int customerId, bool? toggledelete)
         {
+            if(toggledelete != null)
+            {
+                ViewData["ToggleDelete"] = true;
+            }
             var customer = _context.Customers.Where(c => c.Id == customerId).Include(c => c.Orders).ThenInclude(o => o.Items).First();
             return View(customer);
         }
@@ -67,5 +71,6 @@ namespace CoffeeShopMVC.Controllers
             _context.SaveChanges();
             return Redirect($"/customers/{customerId}/orders/details/{orderId}");
         }
+
     }
 }

@@ -1,4 +1,7 @@
 ﻿@model Customer
+@{
+    List<Order> orders = ViewData["order"] as List<Order>;
+}
 
 <h1>Customer Details</h1>
 
@@ -7,6 +10,21 @@
 <p>Name: @Model.Name</p>
 
 <p>Email: @Model.Email</p>
+
+<p>All Items</p>
+
+@foreach (var order in orders)
+{
+    @foreach (var item in order.ListOfItems)
+    {
+        <p>@item.Name : @item.PriceInDollars()</p>
+    }
+    <p>Total for Order: @order.GetAllItemsPrice()</p>
+    var TotalTotal = 0;
+    TotalTotal += order.GetAllItemsPrice();
+    <p>Total: @TotalTotal</p>
+}
+
 
 <form method="post" action="/customers/delete/@Model.Id">
     <div class="deletebutton">

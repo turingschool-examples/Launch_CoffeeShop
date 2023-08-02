@@ -38,7 +38,9 @@ namespace CoffeeShopMVC.Controllers
         [Route("Customers/details/{id:int}")]
         public IActionResult Details(int id)
         {
+           
             var customer = _context.Customers.Find(id);
+            ViewData["order"] = customer.Orders;
             return View(customer);
         }
 

@@ -33,8 +33,10 @@ namespace CoffeeShopMVC.Controllers
         [HttpPost]
         public IActionResult Index(Item item)
         {
+
             _context.Items.Add(item);
             _context.SaveChanges();
+
             var newItemId = item.Id;
 
            // return Redirect($"/items/details/{item.Id}");

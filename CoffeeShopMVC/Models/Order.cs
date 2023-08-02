@@ -1,4 +1,6 @@
-﻿namespace CoffeeShopMVC.Models
+﻿using CoffeeShopMVC.Controllers;
+
+namespace CoffeeShopMVC.Models
 {
     public class Order
     {
@@ -6,5 +8,19 @@
         public Customer OrderCustomer { get; set; }
         public List<Item> ListOfItems { get; set; }
         public string DateCreated { get; set; }
+
+       
+        
+        public int GetAllItemsPrice() 
+        
+        {
+            int Total = 0;
+            foreach (var item in ListOfItems) 
+            {
+                Total  += item.PriceInCents;
+            }
+            
+            return Total;
+        }
     }
 }

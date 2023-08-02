@@ -81,5 +81,29 @@ namespace CoffeeShopMVC.Controllers
             _context.SaveChanges();
             return Redirect($"/customers/{customerId}/orders");
         }
+
+        [Route("/customers/{customerId:int}/orders/additem/{orderId:int}")]
+        public IActionResult AddItem(int customerId, int orderId)
+        {
+            var order = _context.Orders.Include(o => o.Items).Where(o => o.Id == orderId).First();
+            var items = _context.Items.Include(i => i.Order).ToList();
+
+            ViewData["allitems"] = items;
+            return View(order);
+        }
+
+        [HttpPost]
+        [Route("/customers/{customerId:int}/orders/additem/{orderId:int}")]
+        public IActionResult AddItem(int customerId, int orderId, int itemId)
+        {
+            var order = _context.Orders.Include(o => o.Items).Where(o => o.Id == orderId).First();
+            var item = _context.Items.Find(itemId);
+            order.Items.Add(item);
+            _context.Orders.Update(order);
+            _context.SaveChanges();
+
+            return Redirect($"/customers/{customerId}/orders/additem/{orderId}");
+        }
+
     }
 }

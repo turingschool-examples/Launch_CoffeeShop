@@ -1,0 +1,28 @@
+﻿@model Customer
+@{
+    bool? toggleDelete = ViewData["ToggleDelete"] as bool?;
+}
+
+<h1>@Model.Name's Orders</h1>
+
+@foreach(var order in Model.Orders)
+{
+    <p><a href="/customers/@Model.Id/orders/details/@order.Id">@order.DateCreated.ToString("mm-dd-yy")</a> Items: @order.Items.Count()</p>
+    @if(toggleDelete == true)
+    {
+        <form method="post" action="/customers/@Model.Id/orders/delete/@order.Id">
+            <button type="submit">Delete Order</button>    
+        </form>
+    }
+}
+
+<a href="/customers/@Model.Id/orders/new">Create New Order</a>
+
+@if(toggleDelete != true)
+{
+    <a href="/customers/@Model.Id/orders?toggledelete=True">Turn On Delete</a>
+}
+else
+{
+    <a href="/customers/@Model.Id/orders">Turn Off Delete</a>
+}

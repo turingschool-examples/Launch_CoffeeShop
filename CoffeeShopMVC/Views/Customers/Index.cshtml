@@ -1,0 +1,9 @@
+﻿@model List<Customer>
+
+<h1>All Customers</h1>
+
+@foreach(var customer in Model){
+    <h3><a href="/customers/details/@customer.Id">@customer.Name</a></h3>
+}
+
+<a href="/customers/new">add new customer</a>

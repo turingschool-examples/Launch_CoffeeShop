@@ -1,0 +1,10 @@
+﻿@model Order
+<h1>Edit the Order</h1>
+
+<form method="post" action="/customers/@Model.Customer.Id/orders/details/@Model.Id">
+    <div>
+        <label for="DateCreated">Date Created:</label>
+        <input type="date" id="DateCreated" name="DateCreated" value="@Model.DateCreated" required />
+    </div> 
+    <buttom type="submit">Update Order</buttom>
+</form>

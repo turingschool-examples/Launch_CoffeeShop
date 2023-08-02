@@ -1,0 +1,15 @@
+﻿<h1>New Item</h1>
+
+<form method="post" action="/items/new">
+    <div>
+        <label for="Name">Name:</label>
+        <input type="text" id="Name" name="Name" required />
+    </div> 
+    <div>
+        <label for="Price">PriceInCents:</label>
+        <input type="Number" id="Price" name="PriceInCents" min="0" required />
+    </div>
+    <div>
+        <button type ="submit">Add Item</button>
+    </div>
+</form>

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CoffeeShopMVC.Migrations
 {
     [DbContext(typeof(CoffeeShopMVCContext))]
-    [Migration("20230801203032_CreateDb")]
-    partial class CreateDb
+    [Migration("20230801211212_UpdatedDbContext")]
+    partial class UpdatedDbContext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,9 +69,9 @@ namespace CoffeeShopMVC.Migrations
                         .HasColumnName("name");
 
                     b.HasKey("Id")
-                        .HasName("pk_customer");
+                        .HasName("pk_customers");
 
-                    b.ToTable("customer", (string)null);
+                    b.ToTable("customers", (string)null);
                 });
 
             modelBuilder.Entity("CoffeeShopMVC.Models.Order", b =>
@@ -92,12 +92,12 @@ namespace CoffeeShopMVC.Migrations
                         .HasColumnName("date_created");
 
                     b.HasKey("Id")
-                        .HasName("pk_order");
+                        .HasName("pk_orders");
 
                     b.HasIndex("CustomerId")
-                        .HasDatabaseName("ix_order_customer_id");
+                        .HasDatabaseName("ix_orders_customer_id");
 
-                    b.ToTable("order", (string)null);
+                    b.ToTable("orders", (string)null);
                 });
 
             modelBuilder.Entity("ItemOrder", b =>
@@ -126,7 +126,7 @@ namespace CoffeeShopMVC.Migrations
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_order_customer_customer_id");
+                        .HasConstraintName("fk_orders_customers_customer_id");
 
                     b.Navigation("Customer");
                 });
@@ -145,7 +145,7 @@ namespace CoffeeShopMVC.Migrations
                         .HasForeignKey("OrdersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_item_order_order_orders_id");
+                        .HasConstraintName("fk_item_order_orders_orders_id");
                 });
 
             modelBuilder.Entity("CoffeeShopMVC.Models.Customer", b =>

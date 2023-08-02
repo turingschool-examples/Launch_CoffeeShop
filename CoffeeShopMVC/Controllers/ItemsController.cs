@@ -1,7 +1,6 @@
 ﻿using CoffeeShopMVC.DataAccess;
 using CoffeeShopMVC.Model;
 using Microsoft.AspNetCore.Mvc;
-using CoffeeShopMVC.Model;
 
 namespace CoffeeShopMVC.Controllers
 {

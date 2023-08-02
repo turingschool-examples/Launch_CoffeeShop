@@ -36,12 +36,19 @@ namespace CoffeeShopMVC.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("integer")
+                        .HasColumnName("order_id");
+
                     b.Property<int>("PriceInCents")
                         .HasColumnType("integer")
                         .HasColumnName("price_in_cents");
 
                     b.HasKey("Id")
                         .HasName("pk_items");
+
+                    b.HasIndex("OrderId")
+                        .HasDatabaseName("ix_items_order_id");
 
                     b.ToTable("items", (string)null);
                 });
@@ -66,9 +73,9 @@ namespace CoffeeShopMVC.Migrations
                         .HasColumnName("name");
 
                     b.HasKey("Id")
-                        .HasName("pk_customer");
+                        .HasName("pk_customers");
 
-                    b.ToTable("customer", (string)null);
+                    b.ToTable("customers", (string)null);
                 });
 
             modelBuilder.Entity("CoffeeShopMVC.Models.Order", b =>
@@ -89,31 +96,22 @@ namespace CoffeeShopMVC.Migrations
                         .HasColumnName("date_created");
 
                     b.HasKey("Id")
-                        .HasName("pk_order");
+                        .HasName("pk_orders");
 
                     b.HasIndex("CustomerId")
-                        .HasDatabaseName("ix_order_customer_id");
+                        .HasDatabaseName("ix_orders_customer_id");
 
-                    b.ToTable("order", (string)null);
+                    b.ToTable("orders", (string)null);
                 });
 
-            modelBuilder.Entity("ItemOrder", b =>
+            modelBuilder.Entity("CoffeeShopMVC.Model.Item", b =>
                 {
-                    b.Property<int>("ItemsId")
-                        .HasColumnType("integer")
-                        .HasColumnName("items_id");
+                    b.HasOne("CoffeeShopMVC.Models.Order", "Order")
+                        .WithMany("Items")
+                        .HasForeignKey("OrderId")
+                        .HasConstraintName("fk_items_order_order_id");
 
-                    b.Property<int>("OrdersId")
-                        .HasColumnType("integer")
-                        .HasColumnName("orders_id");
-
-                    b.HasKey("ItemsId", "OrdersId")
-                        .HasName("pk_item_order");
-
-                    b.HasIndex("OrdersId")
-                        .HasDatabaseName("ix_item_order_orders_id");
-
-                    b.ToTable("item_order", (string)null);
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("CoffeeShopMVC.Models.Order", b =>
@@ -123,12 +121,12 @@ namespace CoffeeShopMVC.Migrations
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_order_customer_customer_id");
+                        .HasConstraintName("fk_orders_customers_customer_id");
 
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("ItemOrder", b =>
+            modelBuilder.Entity("CoffeeShopMVC.Models.Customer", b =>
                 {
                     b.HasOne("CoffeeShopMVC.Model.Item", null)
                         .WithMany()
@@ -142,12 +140,12 @@ namespace CoffeeShopMVC.Migrations
                         .HasForeignKey("OrdersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_item_order_order_orders_id");
+                        .HasConstraintName("fk_item_order_orders_orders_id");
                 });
 
-            modelBuilder.Entity("CoffeeShopMVC.Models.Customer", b =>
+            modelBuilder.Entity("CoffeeShopMVC.Models.Order", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

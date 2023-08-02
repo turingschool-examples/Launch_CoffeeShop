@@ -6,7 +6,7 @@ namespace CoffeeShopMVC.Models
     {
         public int Id { get; set; }
         public Customer OrderCustomer { get; set; }
-        public List<Item> ListOfItems { get; set; }
+        public List<Item>? ListOfItems { get; set; } = new List<Item>();
         public string DateCreated { get; set; }
 
        

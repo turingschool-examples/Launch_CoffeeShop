@@ -29,6 +29,26 @@ namespace CoffeeShopMVC.Controllers
             return View(order);
         }
 
+
+        [Route("/customers/{customerId:int}/orders/new")]
+        public IActionResult New(int customerId)
+        {
+            var customer = _context.Customers.Where(c => c.Id == customerId).Include(c => c.Orders).First();
+            return View(customer);
+        }
+
+        [HttpPost]
+        [Route("/customers/{customerId:int}/orders")]
+        public IActionResult Create(Order order, int customerId)
+        {
+            var customer = _context.Customers.Where(c => c.Id == customerId).Include(c => c.Orders).ThenInclude(o => o.Items).First();
+            order.DateCreated = order.DateCreated.ToUniversalTime();
+            customer.Orders.Add(order);
+            _context.SaveChanges();
+
+            return Redirect($"/customers/{customer.Id}/orders");
+        }
+
         [Route("/customers/{customerId:int}/orders/edit/{orderId:int}")]
         public IActionResult Edit(int customerId, int orderId)
         {

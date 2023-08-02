@@ -9,6 +9,8 @@
     <p>@item</p>
 }
 
+<h5><a href="/customers/@Model.Id/orders">@Model.Name Order's page</a></h5>
+
 @if(Model.Orders.Count() == 0)
 {
     <form method="post" action="/customers/delete/@Model.Id">

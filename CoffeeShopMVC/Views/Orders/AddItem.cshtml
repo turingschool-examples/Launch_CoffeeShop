@@ -3,3 +3,18 @@
     List<Item> Items = ViewData["allitems"] as List<Item>;
 }
 
+<h1>Add Items to Order Number: @Model.Id</h1>
+
+@foreach(var item in Model.Items)
+{
+    <p>@item.Name: @item.PriceInDollars()</p>
+    
+}
+
+<h2>Add Item</h2>
+<form method="post" action="/customers/@Model.Customer.Id/orders/addorder/@Model.Id">
+    @foreach(var item in Items.Where(i => i.Order == null))
+    {
+        <button type ="submit" name="itemId" value="@item.Id">@item.Name: @item.PriceInDollars()</button>
+    }
+</form>

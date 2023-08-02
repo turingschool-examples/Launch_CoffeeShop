@@ -10,7 +10,9 @@
     <p><a href="/customers/@Model.Id/orders/details/@order.Id">@order.DateCreated.ToString("mm-dd-yy")</a> Items: @order.Items.Count()</p>
     @if(toggleDelete == true)
     {
-        <p>Delete</p>
+        <form method="post" action="/customers/@Model.Id/orders/delete/@order.Id">
+            <button type="submit">Delete Order</button>    
+        </form>
     }
 }
 
